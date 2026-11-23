@@ -1,0 +1,3 @@
+# 运行程序本身不需要第三方库（只用 Python 标准库 + tkinter）。
+# 下面只在你要打包 EXE 时需要。
+pyinstaller>=6.0
