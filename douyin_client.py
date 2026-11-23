@@ -412,36 +412,36 @@ SCOPE_VALUES = dict((v, k) for k, v in SCOPE_LABELS.items())
 class App:
     THEMES = {
         "light": {
-            "bg": "#f1f5f9", "card": "#ffffff", "border": "#e2e8f0", "text": "#0f172a",
-            "muted": "#64748b", "accent": "#4f46e5", "accent_active": "#4338ca", "accent_press": "#3730a3",
-            "header": "#1e1b4b", "header_text": "#ffffff", "header_sub": "#a5b4fc",
-            "ok": "#15803d", "warn": "#b45309", "bad": "#dc2626",
-            "odd": "#f8fafc", "select": "#e0e7ff",
-            "btn_active": "#eef2ff", "btn_active_border": "#c7d2fe", "disabled": "#94a3b8",
-            "ghost_hover": "#f1f5f9", "primary_disabled": "#a5b4fc",
-            "header_btn_fg": "#c7d2fe", "header_line": "#312e81",
-            "header_field": "#312e81", "header_hover_border": "#6366f1",
-            "data_bg": "#f8fafc", "head_fg": "#334155", "sel_fg": "#1e1b4b",
-            "scroll": "#cbd5e1", "live_bg": "#fee2e2", "err_bg": "#fef3c7",
-            "paused": "#94a3b8", "waiting": "#64748b",
-            "ok_bg": "#dcfce7", "busy_bg": "#e0e7ff",
-            "log_bg": "#f8fafc", "row_hover": "#eef2ff",
+            "bg": "#eef1f6", "card": "#ffffff", "border": "#dfe4ec", "text": "#1f2430",
+            "muted": "#6b7280", "accent": "#2f6fed", "accent_active": "#1f57c9",
+            "header": "#1b2437", "header_text": "#ffffff", "header_sub": "#9fb0c9",
+            "ok": "#1f7a33", "warn": "#b45309", "bad": "#c0392b",
+            "odd": "#f7f9fc", "select": "#e6efff",
+            "btn_active": "#e9eef8", "btn_active_border": "#c9d5ea", "disabled": "#a8b0bd",
+            "ghost_hover": "#eef2f8", "primary_disabled": "#a9c4f6",
+            "header_btn_fg": "#dbe4f2", "header_line": "#3a4763",
+            "header_field": "#27344e", "header_hover_border": "#4d5f85",
+            "data_bg": "#f4f6fa", "head_fg": "#4a5568", "sel_fg": "#12305c",
+            "scroll": "#e6eaf1", "live_bg": "#fff1f0", "err_bg": "#fff7e6",
+            "paused": "#9aa0a6", "waiting": "#6b7280",
+            "ok_bg": "#eaf7ee", "busy_bg": "#e8f0fe",
+            "log_bg": "#fbfcfe", "row_hover": "#eef2f8",
         },
         "dark": {
-            "bg": "#0f172a", "card": "#1e293b", "border": "#334155", "text": "#e2e8f0",
-            "muted": "#94a3b8", "accent": "#818cf8", "accent_active": "#a5b4fc", "accent_press": "#6366f1",
-            "header": "#0c0a1a", "header_text": "#eef2ff", "header_sub": "#a5b4fc",
-            "ok": "#4ade80", "warn": "#fbbf24", "bad": "#f87171",
-            "odd": "#1e293b", "select": "#3730a3",
-            "btn_active": "#312e81", "btn_active_border": "#4338ca", "disabled": "#64748b",
-            "ghost_hover": "#1e293b", "primary_disabled": "#4338ca",
-            "header_btn_fg": "#c7d2fe", "header_line": "#312e81",
-            "header_field": "#1e1b4b", "header_hover_border": "#6366f1",
-            "data_bg": "#0f172a", "head_fg": "#cbd5e1", "sel_fg": "#e0e7ff",
-            "scroll": "#334155", "live_bg": "#450a0a", "err_bg": "#451a03",
-            "paused": "#64748b", "waiting": "#94a3b8",
-            "ok_bg": "#14532d", "busy_bg": "#1e1b4b",
-            "log_bg": "#0b1220", "row_hover": "#1e293b",
+            "bg": "#12161d", "card": "#1a202b", "border": "#2a3340", "text": "#e7ecf4",
+            "muted": "#9aa7ba", "accent": "#4c8dff", "accent_active": "#3a76e0",
+            "header": "#0d1117", "header_text": "#f4f8ff", "header_sub": "#8ea1bd",
+            "ok": "#5ecf86", "warn": "#e0a33e", "bad": "#f07171",
+            "odd": "#1f2733", "select": "#2a3b57",
+            "btn_active": "#26303e", "btn_active_border": "#3a4759", "disabled": "#66707f",
+            "ghost_hover": "#232b38", "primary_disabled": "#39527d",
+            "header_btn_fg": "#cdd8ea", "header_line": "#2c3546",
+            "header_field": "#161c26", "header_hover_border": "#42506a",
+            "data_bg": "#161c26", "head_fg": "#aebbd0", "sel_fg": "#e4edff",
+            "scroll": "#2a3340", "live_bg": "#3a2026", "err_bg": "#3a2f1c",
+            "paused": "#7c8697", "waiting": "#96a3b6",
+            "ok_bg": "#163122", "busy_bg": "#1c2b45",
+            "log_bg": "#141a23", "row_hover": "#232b38",
         },
     }
 
@@ -470,10 +470,6 @@ class App:
         self.count_var = tk.StringVar(value="")
         self.platform_box = None
         self.job_running = False
-        # 状态栏呼吸灯动效状态（纯主线程 after 驱动，rebuild_ui 时由 build_ui 重启）
-        self._pulse_phase = 0
-        self._pulse_job = None
-        self.status_dot = None
         self.live_cycle_count = 0
         self.live_interval_var = tk.IntVar(value=int(self.cfg.get("live_poll_interval") or 60))
         self.live_separate_var = tk.BooleanVar(value=bool(self.cfg.get("live_separate", True)))
@@ -800,497 +796,7 @@ class App:
         self.save_config()
         log.info("直播画质已设置为：%s（%s）", key, core.LIVE_QUALITY_NAMES.get(key, key))
 
-    # ============================================================ 新版 UI（控制台风）
-    # 说明：业务逻辑/回调一律不碰，只重建控件树；所有 self.xxx 接口与旧版一致。
-
-    def _ui_blend(self, hex1, hex2, t):
-        """两色线性插值（渐变头 / 状态环用）。"""
-        try:
-            h1, h2 = hex1.lstrip("#"), hex2.lstrip("#")
-            ch = lambda a, b: max(0, min(255, round(int(a, 16) * (1 - t) + int(b, 16) * t)))
-            return "#%02x%02x%02x" % (ch(h1[0:2], h2[0:2]),
-                                      ch(h1[2:4], h2[2:4]), ch(h1[4:6], h2[4:6]))
-        except Exception:
-            return hex1
-
-    def _paint_header(self, canvas, *args):
-        """渐变横幅自绘：左深右亮 + 细网格纹理 + logo + 标题。Configure 时重绘。"""
-        try:
-            w = canvas.winfo_width()
-            h = canvas.winfo_height()
-            if w < 10 or h < 10:
-                return
-            c = getattr(self, "colors", None) or self.COLORS
-            canvas.delete("all")
-            # 横向渐变（深靛紫 -> 蓝紫），用垂直细线逐列绘制
-            c1, c2 = c["header"], c["accent_active"]
-            for x in range(w):
-                canvas.create_line(x, 0, x, h, fill=self._ui_blend(c1, c2, (x / max(1, w - 1)) * 0.72))
-            # 顶部/底部高光发丝线
-            canvas.create_line(0, h - 2, w, h - 2, fill=c["header_hover_border"], width=1)
-            # 装饰：右侧斜向条纹（低对比），堆质感
-            for i in range(0, w, 34):
-                canvas.create_line(w - i, 0, w - i - 18, h,
-                                   fill=self._ui_blend(c1, c2, 0.5), width=1)
-            # logo 圆角方 + 字样
-            pad = 16
-            r = 22
-            canvas.create_rectangle(pad, 14, pad + r * 2, 14 + r * 2,
-                                    fill="#ffffff", outline="")
-            canvas.create_text(pad + r, 14 + r, text="DY",
-                               font=("Microsoft YaHei UI", 15, "bold"), fill=c["header"])
-            canvas.create_text(pad + r * 2 + 14, 22, text="抖音 / TikTok 账号监控",
-                               font=("Microsoft YaHei UI", 15, "bold"), fill="#ffffff", anchor="nw")
-            canvas.create_text(pad + r * 2 + 14, 48, text="CONTROL CENTER  ·  多平台作品与直播监控",
-                               font=("Microsoft YaHei UI", 8), fill=c["header_sub"], anchor="nw")
-        except Exception:  # noqa: BLE001
-            pass
-
-    def _stat_card(self, parent, key, icon, title, accent, value="0"):
-        """统计卡片：彩色顶条 + 图标 + 大数字 + 标签，hover 抬起高亮。"""
-        c = getattr(self, "colors", None) or self.COLORS
-        card = tk.Frame(parent, bg=c["card"], highlightthickness=1,
-                        highlightbackground=c["border"], bd=0)
-        tk.Frame(card, bg=accent, height=4).pack(fill="x")
-        inner = tk.Frame(card, bg=c["card"])
-        inner.pack(fill="both", expand=True, padx=10, pady=(6, 7))
-        icon_lbl = tk.Label(inner, text=icon, font=("Segoe UI Symbol", 17),
-                            bg=c["card"], fg=accent)
-        icon_lbl.pack(side="left", padx=(0, 9))
-        col = tk.Frame(inner, bg=c["card"])
-        col.pack(side="left", fill="x", expand=True)
-        val_lbl = tk.Label(col, text=str(value), font=("Microsoft YaHei UI", 16, "bold"),
-                           bg=c["card"], fg=c["text"])
-        val_lbl.pack(anchor="w")
-        tk.Label(col, text=title, font=("Microsoft YaHei UI", 8),
-                 bg=c["card"], fg=c["muted"]).pack(anchor="w")
-        def _enter(_e, cd=card, ac=accent, bd=c["border"]):
-            cd.configure(highlightbackground=ac, bg=self._ui_blend(c["card"], ac, 0.06))
-            for ch in cd.winfo_children():
-                try:
-                    ch.configure(bg=self._ui_blend(c["card"], ac, 0.06))
-                    for sub in ch.winfo_children():
-                        try:
-                            sub.configure(bg=self._ui_blend(c["card"], ac, 0.06))
-                        except Exception:
-                            pass
-                except Exception:
-                    pass
-        def _leave(_e, cd=card, bd=c["border"]):
-            cd.configure(highlightbackground=bd, bg=c["card"])
-            for ch in cd.winfo_children():
-                try:
-                    ch.configure(bg=c["card"])
-                    for sub in ch.winfo_children():
-                        try:
-                            sub.configure(bg=c["card"])
-                        except Exception:
-                            pass
-                except Exception:
-                    pass
-        card.bind("<Enter>", _enter)
-        card.bind("<Leave>", _leave)
-        if not hasattr(self, "_stat_vals"):
-            self._stat_vals = {}
-        self._stat_vals[key] = val_lbl
-        return card
-
-    def update_stats_cards(self):
-        """刷新统计卡片数字（由 refresh_account_count / tick_status 调用）。"""
-        vals = getattr(self, "_stat_vals", {}) or {}
-        if not vals:
-            return
-        try:
-            accts = getattr(self, "accounts", []) or []
-            total = len(accts)
-            on = sum(1 for a in accts if a.get("enabled", True))
-            live = sum(1 for a in accts if a.get("live"))
-            dl = len(getattr(self, "dl_files", {}) or {})
-            running = bool(getattr(self, "job_running", False))
-            for key, text in (("total", total), ("enabled", on),
-                              ("live", live), ("download", dl)):
-                if key in vals:
-                    vals[key].configure(text=str(text))
-                if key + "_hero" in vals:
-                    vals[key + "_hero"].configure(text=str(text))
-            # 总览页 hero 状态徽章（tk.Label，支持 fg/bg）
-            hero = getattr(self, "_overview_status", None)
-            if hero is not None:
-                cc = getattr(self, "colors", self.COLORS)
-                hero.configure(text=("监控运行中" if running else "监控已停止"),
-                               fg=(cc["ok"] if running else cc["text"]))
-                dot = getattr(self, "_hero_dot", None)
-                if dot is not None:
-                    dot.configure(text=("◉" if running else "◌"),
-                                  fg=(cc["ok"] if running else cc["muted"]))
-                sub = getattr(self, "_hero_sub", None)
-                if sub is not None:
-                    sub.configure(text=("LIVE · 监控循环运行中" if running else "READY · 尚未启动监控循环"),
-                                  fg=(cc["ok"] if running else cc["muted"]))
-        except Exception:  # noqa: BLE001
-            pass
-
-    def _paint_overview_ring(self, canvas, *args):
-        """总览页：Canvas 环形仪表盘（监控状态可视化）。"""
-        try:
-            w, h = canvas.winfo_width(), canvas.winfo_height()
-            if w < 20 or h < 20:
-                return
-            c = getattr(self, "colors", None) or self.COLORS
-            canvas.delete("all")
-            cx, cy = w / 2, h / 2
-            r = min(w, h) / 2 - 14
-            running = bool(getattr(self, "job_running", False))
-            base = c["border"]
-            active = c["ok"] if running else c["accent"]
-            canvas.create_oval(cx - r, cy - r, cx + r, cy + r,
-                               outline=base, width=10)
-            extent = 320 if running else 210
-            canvas.create_arc(cx - r, cy - r, cx + r, cy + r,
-                              start=110, extent=extent, style="arc", outline=active, width=10)
-            canvas.create_text(cx, cy - 6, text=("●" if running else "○"),
-                               font=("Microsoft YaHei UI", 26),
-                               fill=active)
-            canvas.create_text(cx, cy + 20, text=("LIVE" if running else "IDLE"),
-                               font=("Consolas", 11, "bold"), fill=c["text"])
-        except Exception:  # noqa: BLE001
-            pass
-
     def build_ui(self):
-        self.quality_var = tk.StringVar(value=self.cfg.get("live_quality", "FULL_HD1"))
-
-        # 必须保留的设置变量（菜单依赖），与旧版完全一致
-        self.silent_var = tk.BooleanVar(value=bool(self.cfg.get("silent_mode")))
-        self.watch_var = tk.BooleanVar(value=bool(self.cfg.get("clipboard_watch")))
-        self.rec_var = tk.BooleanVar(value=bool(self.cfg.get("live_record", True)))
-        self.close_var = tk.StringVar(value=self.close_action())
-        self.automon_var = tk.BooleanVar(value=bool(self.cfg.get("auto_monitor", True)))
-        self.notify_var = tk.BooleanVar(value=bool(self.cfg.get("notify_enabled", True)))
-        self.dlvideo_var = tk.BooleanVar(value=bool(self.cfg.get("download_video", True)))
-        self.dlimg_var = tk.BooleanVar(value=bool(self.cfg.get("download_images", True)))
-        self.auditevery_var = tk.BooleanVar(value=bool(self.cfg.get("audit_every_round", True)))
-        self.full_audit_enabled_var = tk.BooleanVar(value=bool(self.cfg.get("full_audit_enabled", True)))
-        self.audit_start_var = tk.BooleanVar(value=bool(self.cfg.get("audit_on_start", True)))
-        self.theme = "dark" if str(self.cfg.get("theme") or "light").lower() == "dark" else "light"
-        self.colors = dict(self.THEMES[self.theme])
-        self.COLORS = self.colors
-        self.platform_var.set(core.platform_label(self.default_platform()))
-        self.live_rows = {}
-        self.live_visible = False
-        self.cookie_badges = {}
-        self._stat_vals = {}
-        self.setup_styles()
-        self.build_menubar()
-        c = self.colors
-
-        # ---------- ① 顶部渐变横幅（Canvas 自绘） ----------
-        header_h = hi_dpi.scale_px(76)
-        header = tk.Canvas(self.root, height=header_h, bd=0, highlightthickness=0)
-        header.pack(fill="x")
-        header.bind("<Configure>", lambda _e, cv=header: self._paint_header(cv))
-        # 平台切换：相对定位贴在横幅右上
-        tk.Label(header, text="平台", font=("Microsoft YaHei UI", 9),
-                 fg=c["header_sub"], bg=c["header"]).place(relx=0.855, rely=0.5, anchor="e")
-        self.platform_box = ttk.Combobox(
-            header, textvariable=self.platform_var, state="readonly", width=8,
-            style="Header.TCombobox",
-            values=[core.platform_label(p) for p in core.PLATFORMS])
-        self.platform_box.place(relx=0.99, rely=0.5, anchor="e", width=hi_dpi.scale_px(90))
-        self.platform_box.bind("<<ComboboxSelected>>", lambda _e: self.on_platform_change())
-
-        # ---------- ② 统计卡片行 + Cookie 徽章 ----------
-        stats = ttk.Frame(self.root, style="App.TFrame")
-        stats.pack(fill="x", padx=12, pady=(10, 0))
-        stats_inner = tk.Frame(stats, bg=c["bg"])
-        stats_inner.pack(fill="x")
-        self._stat_vals = {}
-        for i, (key, icon, title, ac) in enumerate((
-                ("total", "▦", "账号总数", c["accent"]),
-                ("enabled", "◉", "启用中", c["ok"]),
-                ("live", "◈", "直播中", c["bad"]),
-                ("download", "⇩", "本次下载", c["warn"]))):
-            card = self._stat_card(stats_inner, key, icon, title, ac, "0")
-            card.grid(row=0, column=i, sticky="nsew", padx=(0 if i == 0 else 10, 10), pady=(0, 2))
-            stats_inner.columnconfigure(i, weight=1)
-        # 信息行：左=数据目录（可点击），右=Cookie 状态徽章
-        info_row = tk.Frame(stats, bg=c["bg"])
-        info_row.pack(fill="x", pady=(4, 0))
-        self.douk_var = tk.StringVar(value=self.current_douk_dir())
-        douk_lbl = tk.Label(info_row, textvariable=self.douk_var, font=("Microsoft YaHei UI", 8),
-                            fg=c["muted"], bg=c["bg"], cursor="hand2")
-        douk_lbl.pack(side="left")
-        douk_lbl.bind("<Button-1>", lambda _e: self.open_data_dir())
-        badges = tk.Frame(info_row, bg=c["bg"])
-        badges.pack(side="right")
-        for plat in ("douyin", "tiktok"):
-            lbl = tk.Label(badges, text="● " + core.platform_label(plat) + " Cookie：—",
-                           font=("Microsoft YaHei UI", 8), bg=c["bg"], fg=c["muted"])
-            lbl.pack(side="left", padx=(10, 0))
-            self.cookie_badges[plat] = lbl
-
-        # ---------- ③ 底部控制栏 ----------
-        control = ttk.Frame(self.root, style="Card.TFrame", padding=(12, 9))
-        control.pack(side="bottom", fill="x", padx=12, pady=(0, 6))
-        row1 = ttk.Frame(control, style="Card.TFrame")
-        row1.pack(fill="x")
-        ttk.Label(row1, text="检查间隔", style="Body.TLabel").pack(side="left")
-        self.interval_var = tk.IntVar(value=int(self.cfg["poll_interval"]))
-        self.interval_spin = ttk.Spinbox(row1, from_=MIN_INTERVAL, to=MAX_INTERVAL,
-                                         increment=30, width=6, textvariable=self.interval_var)
-        self.interval_spin.pack(side="left", padx=(4, 2))
-        self.interval_spin.bind("<FocusOut>", self.on_interval_commit)
-        self.interval_spin.bind("<Return>", self.on_interval_commit)
-        ttk.Label(row1, text="秒", style="Body.TLabel").pack(side="left")
-        self.live_var = tk.BooleanVar(value=bool(self.cfg["live_check"]))
-        ttk.Checkbutton(row1, text="检测直播", variable=self.live_var).pack(side="left", padx=(14, 0))
-        ttk.Label(row1, text="直播间隔", style="Body.TLabel").pack(side="left", padx=(10, 0))
-        self.live_interval_spin = ttk.Spinbox(row1, from_=MIN_LIVE_INTERVAL, to=MAX_INTERVAL,
-                                              increment=10, width=6,
-                                              textvariable=self.live_interval_var)
-        self.live_interval_spin.pack(side="left", padx=(4, 2))
-        ttk.Label(row1, text="秒", style="Body.TLabel").pack(side="left")
-        ttk.Label(row1, text="全量核账", style="Body.TLabel").pack(side="left", padx=(10, 0))
-        self.full_audit_var = tk.IntVar(value=int(self.cfg.get("full_audit_interval", 1440)))
-        self.full_audit_spin = ttk.Spinbox(row1, from_=0, to=10080, increment=60, width=6,
-                                           textvariable=self.full_audit_var)
-        self.full_audit_spin.pack(side="left", padx=(4, 2))
-        self.full_audit_spin.bind("<FocusOut>", self.on_full_audit_commit)
-        self.full_audit_spin.bind("<Return>", self.on_full_audit_commit)
-        ttk.Label(row1, text="分(0=关闭)", style="Body.TLabel").pack(side="left")
-        self.auto_full_var = tk.BooleanVar(value=bool(self.cfg.get("auto_start_full", False)))
-        ttk.Checkbutton(row1, text="启动即全量", variable=self.auto_full_var,
-                        command=self.on_auto_full_change).pack(side="left", padx=(14, 0))
-        self.scope_var = tk.StringVar(value=SCOPE_LABELS.get(
-            str(self.cfg.get("monitor_scope") or "both"), "作品和直播"))
-        self.scope_box = ttk.Combobox(row1, textvariable=self.scope_var, width=10,
-                                      state="readonly",
-                                      values=("作品和直播", "只监控作品", "只监控直播"))
-        self.scope_box.pack(side="left", padx=(10, 0))
-        self.scope_box.bind("<<ComboboxSelected>>", self.on_scope_change)
-        row2 = ttk.Frame(control, style="Card.TFrame")
-        row2.pack(fill="x", pady=(9, 0))
-        self.start_btn = ttk.Button(row2, text="▶  开始监控", style="Primary.TButton",
-                                    command=lambda: self.toggle_monitor("按钮"))
-        self.start_btn.pack(side="left")
-        ttk.Button(row2, text="单独下载链接…", command=self.open_link_dialog).pack(side="left", padx=(8, 0))
-        self.history_btn = ttk.Button(row2, text="下载历史视频", command=self.download_history)
-        self.history_btn.pack(side="left", padx=(4, 0))
-        ttk.Button(row2, text="清除记录", command=self.clear_download_records).pack(side="left", padx=(4, 0))
-        ttk.Label(row2, text="提示：账号表右键可操作 · 设置菜单可切换深浅色",
-                  style="Hint.TLabel").pack(side="right")
-
-        # ---------- ④ 状态栏 ----------
-        status = ttk.Frame(self.root, style="Status.TFrame", padding=(12, 5))
-        status.pack(side="bottom", fill="x")
-        self.status_dot = tk.Label(status, text="●", font=("Microsoft YaHei UI", 11),
-                                   fg=c["muted"], bg=c["border"], bd=0, width=2)
-        self.status_dot.pack(side="left")
-        self.status_var = tk.StringVar(value="未开始")
-        ttk.Label(status, textvariable=self.status_var,
-                  style="Status.TLabel").pack(side="left")
-        self.countdown_var = tk.StringVar(value="")
-        ttk.Label(status, textvariable=self.countdown_var,
-                  style="Status.TLabel").pack(side="left", padx=(16, 0))
-        ttk.Label(status, text="作品与登录信息都在数据目录里",
-                  style="Status.TLabel").pack(side="right")
-
-        # ---------- ⑤ 主体：PanedWindow（左账号表 / 右 Notebook） ----------
-        body = ttk.Frame(self.root, style="App.TFrame", padding=(12, 8, 12, 4))
-        body.pack(fill="both", expand=True)
-        pane = ttk.PanedWindow(body, orient="horizontal")
-        pane.pack(fill="both", expand=True)
-        left = ttk.Frame(pane, style="Card.TFrame", padding=(10, 8))
-        right = ttk.Frame(pane, style="App.TFrame")
-        pane.add(left, weight=3)
-        pane.add(right, weight=2)
-        self.pane, self.left_pane, self.right_pane = pane, left, right
-        pane.bind("<ButtonRelease-1>", self.on_sash_changed, add="+")
-        pane.bind("<B1-Motion>", self.on_sash_motion, add="+")
-        pane.bind("<Configure>", lambda e: self.root.after_idle(self.repaint_sides), add="+")
-
-        # ---- 左：账号表 ----
-        head = ttk.Frame(left, style="Card.TFrame")
-        head.pack(fill="x", pady=(0, 6))
-        ttk.Label(head, text="账号列表", style="Title.TLabel").pack(side="left")
-        ttk.Label(head, textvariable=self.count_var, style="Hint.TLabel").pack(side="right")
-        tree_wrap = ttk.Frame(left, style="Card.TFrame")
-        cols = ("platform", "nickname", "state", "live", "refresh", "save", "last")
-        self.tree = ttk.Treeview(tree_wrap, columns=cols, show="headings",
-                                 selectmode="extended", height=6)
-        for col, txt, width, min_w, stretch in (
-                ("platform", "平台", 38, 34, False),
-                ("nickname", "昵称", 82, 52, False),
-                ("state", "状态", 58, 48, False),
-                ("live", "监控", 46, 40, False),
-                ("refresh", "刷新", 48, 42, False),
-                ("save", "保存位置", 70, 48, True),
-                ("last", "最近检查", 74, 48, True)):
-            self.tree.heading(col, text=txt, anchor="w")
-            self.tree.column(col, width=hi_dpi.scale_px(width),
-                             minwidth=hi_dpi.scale_px(min_w), anchor="w", stretch=stretch)
-        self.tree.tag_configure("live", foreground=c["bad"], background=c["live_bg"])
-        self.tree.tag_configure("off", foreground=c["paused"])
-        self.tree.tag_configure("ok", foreground=c["ok"])
-        self.tree.tag_configure("busy", foreground=c["accent"], background=c["busy_bg"])
-        self.tree.tag_configure("warn", foreground=c["warn"], background=c["err_bg"])
-        self.tree.tag_configure("wait", foreground=c["waiting"])
-        self.acc_tip = TreeTip(self.tree, self.account_by_iid, self.colors)
-        self.tree.bind("<Button-1>", self.on_tree_click)
-        self.tree.bind("<Button-3>", self.on_tree_context)
-        self.tree.bind("<Double-1>", self.on_tree_double)
-        vsb = ttk.Scrollbar(tree_wrap, orient="vertical", command=self.tree.yview)
-        hsb = ttk.Scrollbar(tree_wrap, orient="horizontal", command=self.tree.xview)
-        self.tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
-        self.tree.grid(row=0, column=0, sticky="nsew")
-        vsb.grid(row=0, column=1, sticky="ns")
-        hsb.grid(row=1, column=0, sticky="ew")
-        tree_wrap.rowconfigure(0, weight=1)
-        tree_wrap.columnconfigure(0, weight=1)
-        btns = ttk.Frame(left, style="Card.TFrame")
-        btns.pack(side="bottom", fill="x", pady=(8, 0))
-        ttk.Button(btns, text="添加账号", command=self.add_account).pack(side="left")
-        ttk.Button(btns, text="删除所选", command=self.remove_accounts).pack(side="left", padx=4)
-        ttk.Button(btns, text="暂停 / 启用", command=self.toggle_enabled).pack(side="left")
-        ttk.Button(btns, text="重新解析", command=self.resolve_selected).pack(side="left", padx=4)
-        tree_wrap.pack(fill="both", expand=True)
-
-        # ---- 右：Notebook 多页 ----
-        nb = ttk.Notebook(right, style="Card.TNotebook")
-        nb.pack(fill="both", expand=True)
-        self.main_notebook = nb
-        # 页1：总览仪表盘（纯 tk 控件，保证截图与真实使用都可见）
-        overview = ttk.Frame(nb, style="Card.TFrame", padding=(14, 12))
-        nb.add(overview, text="总览")
-        self._ring_canvas = None  # 兼容旧引用
-        hero = tk.Frame(overview, bg=c["btn_active"], highlightthickness=1,
-                        highlightbackground=c["border"])
-        hero.pack(fill="x", pady=(2, 10))
-        hero_inner = tk.Frame(hero, bg=c["btn_active"])
-        hero_inner.pack(fill="x", padx=16, pady=13)
-        self._hero_dot = tk.Label(hero_inner, text="◉", font=("Microsoft YaHei UI", 30),
-                                  bg=c["btn_active"], fg=c["muted"])
-        self._hero_dot.pack(side="left", padx=(0, 14))
-        hero_col = tk.Frame(hero_inner, bg=c["btn_active"])
-        hero_col.pack(side="left", fill="x", expand=True)
-        self._overview_status = tk.Label(hero_col, text="监控已停止",
-                                         font=("Microsoft YaHei UI", 15, "bold"),
-                                         bg=c["btn_active"], fg=c["text"], anchor="w")
-        self._overview_status.pack(fill="x")
-        self._hero_sub = tk.Label(hero_col, text="READY · 尚未启动监控循环",
-                                  font=("Consolas", 9), bg=c["btn_active"],
-                                  fg=c["muted"], anchor="w")
-        self._hero_sub.pack(fill="x")
-        # 数据速览行（与顶部统计卡同步）
-        quick = tk.Frame(overview, bg=c["card"])
-        quick.pack(fill="x")
-        for i, (cap, key) in enumerate((("账号", "total"), ("启用", "enabled"),
-                                        ("直播", "live"), ("下载", "download"))):
-            cell = tk.Frame(quick, bg=c["card"])
-            cell.grid(row=0, column=i, sticky="nsew", padx=(0 if i == 0 else 8, 8))
-            quick.columnconfigure(i, weight=1)
-            tk.Label(cell, text=cap, font=("Microsoft YaHei UI", 8),
-                     bg=c["card"], fg=c["muted"]).pack()
-            vl = tk.Label(cell, text="0", font=("Microsoft YaHei UI", 15, "bold"),
-                          bg=c["card"], fg=(c["accent"] if i % 2 == 0 else c["ok"]))
-            vl.pack()
-            self._stat_vals[key + "_hero"] = vl
-        ov_info = ttk.Frame(overview, style="Card.TFrame")
-        ov_info.pack(fill="x", pady=(10, 0))
-        ttk.Label(ov_info, text="顶部卡片与此处实时反映账号 / 下载状态；开始监控后状态徽章转为绿色并持续脉动。",
-                  style="Hint.TLabel", wraplength=hi_dpi.scale_px(360)).pack(anchor="w")
-        ttk.Button(ov_info, text="▶ 一键开始 / 停止监控",
-                   command=lambda: self.toggle_monitor("总览")).pack(anchor="w", pady=(8, 0))
-        # 页2：运行日志
-        self.log_outer = ttk.Frame(nb, style="Card.TFrame", padding=(10, 8))
-        nb.add(self.log_outer, text="运行日志")
-        ghead = ttk.Frame(self.log_outer, style="Card.TFrame")
-        ghead.pack(fill="x")
-        ttk.Label(ghead, text="运行动态", style="Title.TLabel").pack(side="left")
-        ttk.Button(ghead, text="清空", style="Ghost.TButton",
-                   command=self.clear_log_view).pack(side="right")
-        ttk.Checkbutton(ghead, text="详细日志", variable=self.log_detail_var,
-                        command=self.on_log_detail_toggle).pack(side="right", padx=(0, 8))
-        self.log_text = scrolledtext.ScrolledText(
-            self.log_outer, wrap="word", state="disabled", font=("Consolas", 9),
-            height=8, bg=c["log_bg"], fg=c["text"], insertbackground=c["text"],
-            relief="flat", borderwidth=0)
-        self.log_text.pack(fill="both", expand=True, pady=(6, 0))
-        for tag, col in (("err", c["bad"]), ("warn", c["warn"]),
-                         ("ok", c["ok"]), ("dim", c["muted"])):
-            self.log_text.tag_config(tag, foreground=col)
-        self.log_text.configure(state="normal")
-        self.log_text.insert(
-            "end", "这里只显示每轮检测、下载结果和直播录制情况；完整技术日志在 "
-                   "monitor.log（勾「详细日志」可查看全部）。\n", "dim")
-        self.log_text.configure(state="disabled")
-        # 页3：直播录制
-        self.live_outer = ttk.Frame(nb, style="Card.TFrame", padding=(10, 8))
-        nb.add(self.live_outer, text="直播录制")
-        lhead = ttk.Frame(self.live_outer, style="Card.TFrame")
-        lhead.pack(fill="x")
-        ttk.Label(lhead, text="直播录制", style="Title.TLabel").pack(side="left")
-        self.live_sum_var = tk.StringVar(value="")
-        ttk.Label(lhead, textvariable=self.live_sum_var,
-                  style="Hint.TLabel").pack(side="left", padx=(8, 0))
-        self.live_close_btn = ttk.Button(lhead, text="✕", style="Ghost.TButton",
-                                         width=2, command=self.close_live_panel)
-        self.live_close_btn.pack(side="right")
-        live_cols = ("nick", "quality", "res", "duration", "size", "state", "act")
-        self.live_tree = ttk.Treeview(self.live_outer, columns=live_cols,
-                                      show="headings", height=5)
-        for col, txt, width in (("nick", "账号", 92), ("quality", "画质", 86),
-                                ("res", "分辨率", 74), ("duration", "时长", 58),
-                                ("size", "大小", 66), ("state", "状态", 86), ("act", "操作", 46)):
-            self.live_tree.heading(col, text=txt, anchor="w")
-            self.live_tree.column(col, width=width, anchor="w")
-        self.live_tree.tag_configure("rec", foreground=c["bad"])
-        self.live_tree.tag_configure("err", foreground=c["warn"])
-        self.live_tree.tag_configure("done", foreground=c["muted"])
-        self.live_tree.bind("<Button-1>", self.on_live_click)
-        self.live_tree.configure(cursor="hand2")
-        self.live_tree.pack(fill="x", pady=(6, 0))
-        lbtns = ttk.Frame(self.live_outer, style="Card.TFrame")
-        lbtns.pack(fill="x", pady=(6, 0))
-        ttk.Button(lbtns, text="停止全部录制", command=self.stop_all_records).pack(side="left")
-        ttk.Button(lbtns, text="打开录像目录", command=self.open_record_dir).pack(side="left", padx=4)
-        # 页4：本次下载
-        self.dl_outer = ttk.Frame(nb, style="Card.TFrame", padding=(10, 8))
-        nb.add(self.dl_outer, text="本次下载")
-        dhead = ttk.Frame(self.dl_outer, style="Card.TFrame")
-        dhead.pack(fill="x")
-        ttk.Label(dhead, text="本次下载", style="Title.TLabel").pack(side="left")
-        if self.dl_sum_var is None:
-            self.dl_sum_var = tk.StringVar(value="")
-        ttk.Label(dhead, textvariable=self.dl_sum_var, style="Hint.TLabel").pack(side="left", padx=(8, 0))
-        self.dl_close_btn = ttk.Button(dhead, text="✕", style="Ghost.TButton",
-                                       width=2, command=self.close_download_panel)
-        self.dl_close_btn.pack(side="right")
-        dl_cols = ("when", "nick", "kind", "desc")
-        self.dl_tree = ttk.Treeview(self.dl_outer, columns=dl_cols, show="headings", height=6)
-        for col, txt, width in (("when", "时间", 62), ("nick", "账号", 82),
-                                ("kind", "类型", 56), ("desc", "作品", 220)):
-            self.dl_tree.heading(col, text=txt, anchor="w")
-            self.dl_tree.column(col, width=width, anchor="w")
-        self.dl_tree.configure(cursor="hand2")
-        self.dl_tree.tag_configure("new", foreground=c["ok"])
-        self.dl_tree.bind("<Button-1>", self._dl_click)
-        self.dl_tree.bind("<Return>", lambda _e: self.open_download_selected())
-        self.dl_tree.pack(fill="x", pady=(6, 0))
-        dbtns = ttk.Frame(self.dl_outer, style="Card.TFrame")
-        dbtns.pack(fill="x", pady=(6, 0))
-        ttk.Button(dbtns, text="打开作品目录", command=self.open_download_dir).pack(side="left")
-        ttk.Button(dbtns, text="清空列表", command=self.clear_download_list).pack(side="left", padx=4)
-
-        self.update_stats_cards()
-        self._pulse_phase = 0
-        if self._pulse_job is not None:
-            try:
-                self.root.after_cancel(self._pulse_job)
-            except Exception:  # noqa: BLE001
-                pass
-        self._pulse_job = self.root.after(500, self._pulse_tick)
-
-    def build_ui_legacy(self):
         self.quality_var = tk.StringVar(value=self.cfg.get("live_quality", "FULL_HD1"))
         self.silent_var = tk.BooleanVar(value=bool(self.cfg.get("silent_mode")))
         self.watch_var = tk.BooleanVar(value=bool(self.cfg.get("clipboard_watch")))
@@ -1356,10 +862,6 @@ class App:
         # ---------------- 最底部：状态栏 ----------------
         status = ttk.Frame(self.root, style="Status.TFrame", padding=(12, 4))
         status.pack(side="bottom", fill="x")
-        # 状态指示灯：● 随监控状态变色 + 呼吸（监控中才脉动），o 号是静态点。
-        self.status_dot = tk.Label(status, text="●", font=("Microsoft YaHei UI", 10),
-                                   fg=c["muted"], bg=c["border"], bd=0, width=2)
-        self.status_dot.pack(side="left")
         self.status_var = tk.StringVar(value="未开始")
         ttk.Label(status, textvariable=self.status_var,
                   style="Status.TLabel").pack(side="left")
@@ -1600,13 +1102,6 @@ class App:
 
         self.layout_right_panels()
         self.refresh_cookie_badges()
-        self._pulse_phase = 0
-        if self._pulse_job is not None:
-            try:
-                self.root.after_cancel(self._pulse_job)
-            except Exception:  # noqa: BLE001
-                pass
-        self._pulse_job = self.root.after(500, self._pulse_tick)
 
     # -------------------------------------------------------------- 配置
     def load_config(self):
@@ -3149,38 +2644,6 @@ class App:
             self.status_var.set("已停止（异常）")
             self.countdown_var.set("")
 
-    @staticmethod
-    def _blend_color(hex1, hex2, t):
-        """线性混合两个 #rrggbb 色：t=0 取 hex1，t=1 取 hex2。用于呼吸灯亮度过渡。"""
-        try:
-            h1, h2 = hex1.lstrip("#"), hex2.lstrip("#")
-            ch = lambda a, b: round(int(a, 16) * (1 - t) + int(b, 16) * t)
-            return "#%02x%02x%02x" % (ch(h1[0:2], h2[0:2]),
-                                      ch(h1[2:4], h2[2:4]), ch(h1[4:6], h2[4:6]))
-        except Exception:
-            return hex1
-
-    def _pulse_tick(self):
-        """状态栏指示灯动效：监控中呼吸脉动，静止态常亮。纯主线程 after 驱动。"""
-        dot = getattr(self, "status_dot", None)
-        try:
-            if dot is not None and dot.winfo_exists():
-                c = getattr(self, "colors", None) or self.COLORS
-                if getattr(self, "job_running", False):
-                    # 呼吸：在主题 ok 色与背景色之间两帧过渡
-                    self._pulse_phase = 1 - self._pulse_phase
-                    fg = self._blend_color(c["ok"], c["bg"], 0.5 if self._pulse_phase else 0.0)
-                    dot.configure(text="●", fg=fg, bg=c["border"])
-                    delay = 620
-                else:
-                    dot.configure(text="●", fg=c["muted"], bg=c["border"])
-                    delay = 500
-            else:
-                delay = 500
-        except Exception:  # noqa: BLE001
-            delay = 600
-        self._pulse_job = self.root.after(delay, self._pulse_tick)
-
     def tick_status(self):
         """右侧状态栏：每秒刷新一次倒计时；同时让「直播录制」面板的时长/大小实时走"""
         try:
@@ -3196,10 +2659,6 @@ class App:
             if self.monitor_thread and self.monitor_thread.is_alive():
                 self.status_var.set("监控中 · 第 %d 轮" % max(self.cycle_count, 1))
                 self.countdown_var.set(self.countdown_text())
-                self.update_stats_cards()
-                ring = getattr(self, "_ring_canvas", None)
-                if ring is not None:
-                    self._paint_overview_ring(ring)
             elif self.monitor_thread is not None:
                 self.status_var.set("已停止")
                 self.countdown_var.set("")
@@ -4115,12 +3574,6 @@ class App:
         if not force and self.close_action() == "minimize":
             self.minimize_to_background()
             return
-        if getattr(self, "_pulse_job", None):
-            try:
-                self.root.after_cancel(self._pulse_job)
-            except Exception:  # noqa: BLE001
-                pass
-            self._pulse_job = None
         self.stop_event.set()
         try:
             if self.live_mgr and self.live_mgr.items:
@@ -4735,7 +4188,6 @@ class App:
             text += " · 直播中 %d" % live
         text += " · 右键行可操作"
         self.count_var.set(text)
-        self.update_stats_cards()
 
     def clear_log_view(self):
         """清空界面上的日志显示（不动 monitor.log 文件）"""
@@ -5773,19 +5225,19 @@ class App:
                 pass
 
     def layout_right_panels(self):
-        """新版：三块都是 Notebook tab，仅切换 tab，不再 pack/forget（避免破坏 Notebook）。"""
-        nb = getattr(self, "main_notebook", None)
-        if nb is None or getattr(self, "dl_outer", None) is None:
+        """右侧三块按顺序排：直播录制 → 本次下载 → 运行日志"""
+        if getattr(self, "dl_outer", None) is None:
             return
-        try:
-            if self.live_visible:
-                nb.select(self.live_outer)
-            elif self.dl_visible:
-                nb.select(self.dl_outer)
-            else:
-                nb.select(self.log_outer)
-        except Exception:  # noqa: BLE001
-            pass
+        for w in (self.live_outer, self.dl_outer, self.log_outer):
+            try:
+                w.pack_forget()
+            except Exception:  # noqa: BLE001
+                pass
+        if self.live_visible:
+            self.live_outer.pack(fill="x", pady=(0, 8))
+        if self.dl_visible:
+            self.dl_outer.pack(fill="x", pady=(0, 8))
+        self.log_outer.pack(fill="both", expand=True)
 
     def close_live_panel(self):
         """「直播录制」右上角 ✕：只收起面板，录制继续。"""
@@ -5834,18 +5286,9 @@ class App:
                 w.destroy()
             except Exception:  # noqa: BLE001
                 pass
-        # 取消旧界面的呼吸灯定时器，避免重建后出现双 timer 叠加
-        if getattr(self, "_pulse_job", None):
-            try:
-                self.root.after_cancel(self._pulse_job)
-            except Exception:  # noqa: BLE001
-                pass
-            self._pulse_job = None
         self.live_rows = {}
         self.live_visible = False
         self.cookie_badges = {}
-        self._stat_vals = {}
-        self._ring_canvas = None
         self.setup_styles()
         self.build_ui()
         self.refresh_tree()
@@ -6254,22 +5697,10 @@ class App:
 
         style.configure(".", font=font, background=c["bg"], foreground=c["text"])
         style.configure("TFrame", background=c["bg"])
-        style.configure("App.TFrame", background=c["bg"])
         style.configure("Card.TFrame", background=c["card"])
         style.configure("Header.TFrame", background=c["header"])
         style.configure("Status.TFrame", background=c["border"])
         style.configure("TSeparator", background=c["border"])
-        # Notebook 控制台风格：卡片色背景 + 选中 tab 强调色
-        try:
-            style.configure("Card.TNotebook", background=c["bg"], borderwidth=0, tabmargins=(6, 6, 2, 0))
-            style.configure("Card.TNotebook.Tab", font=("Microsoft YaHei UI", 9, "bold"),
-                            padding=(10, 6), background=c["btn_active"], foreground=c["muted"],
-                            borderwidth=0)
-            style.map("Card.TNotebook.Tab",
-                      background=[("selected", c["accent"]), ("active", c["btn_active_border"])],
-                      foreground=[("selected", c["header_text"]), ("active", c["text"])])
-        except Exception:  # noqa: BLE001
-            pass
 
         style.configure("Title.TLabel", background=c["card"], foreground=c["text"],
                         font=("Microsoft YaHei UI", 10, "bold"))
@@ -6284,59 +5715,45 @@ class App:
                         foreground=c["header_sub"])
         style.configure("Status.TLabel", background=c["border"], foreground=c["muted"])
 
-        # 按钮质感：四态（默认 / hover / pressed / disabled）+ 悬停微凸 relief，
-        # 全部靠 ttk style.map 状态机实现（ttk 无 CSS，map 是官方的状态反馈机制）。
-        style.configure("TButton", padding=(11, 6), relief="flat", borderwidth=1,
+        style.configure("TButton", padding=(10, 5), relief="flat", borderwidth=1,
                         background=c["card"], foreground=c["text"],
                         bordercolor=c["border"], focusthickness=0,
                         focuscolor=c["card"], font=font)
         style.map("TButton",
-                  background=[("pressed", c["btn_active_border"]),
-                              ("active", c["btn_active"]), ("disabled", c["card"])],
-                  relief=[("pressed", "sunken"), ("!disabled", "raised"), ("active", "raised")],
-                  foreground=[("disabled", c["disabled"])],
-                  bordercolor=[("active", c["btn_active_border"]),
-                               ("pressed", c["accent"])])
-        style.configure("Tool.TButton", padding=(11, 6))
-        style.configure("Ghost.TButton", padding=(7, 4), borderwidth=0,
+                  background=[("active", "#e9eef8"), ("disabled", c["card"])],
+                  foreground=[("disabled", "#a8b0bd")],
+                  bordercolor=[("active", "#c9d5ea")])
+        style.configure("Tool.TButton", padding=(10, 5))
+        style.configure("Ghost.TButton", padding=(7, 3), borderwidth=0,
                         background=c["card"], foreground=c["muted"])
-        style.map("Ghost.TButton",
-                  background=[("pressed", c["btn_active_border"]),
-                              ("active", c["ghost_hover"])],
-                  foreground=[("active", c["text"])],
-                  relief=[("pressed", "sunken")])
-        style.configure("Primary.TButton", padding=(21, 9), borderwidth=0,
-                        background=c["accent"], foreground=c["header_text"],
-                        font=("Microsoft YaHei UI", 10, "bold"), relief="flat")
+        style.map("Ghost.TButton", background=[("active", "#eef2f8")])
+        style.configure("Primary.TButton", padding=(20, 8), borderwidth=0,
+                        background=c["accent"], foreground="#ffffff",
+                        font=("Microsoft YaHei UI", 10, "bold"))
         style.map("Primary.TButton",
-                  background=[("pressed", c["accent_press"]),
-                              ("active", c["accent_active"]),
-                              ("disabled", c["primary_disabled"])],
-                  foreground=[("disabled", c["header_text"])],
-                  relief=[("pressed", "sunken")])
-        style.configure("HeaderBtn.TButton", padding=(9, 4), borderwidth=1,
-                        background=c["header"], foreground=c["header_btn_fg"],
-                        bordercolor=c["header_line"], font=font, relief="flat")
+                  background=[("active", c["accent_active"]), ("disabled", "#a9c4f6")],
+                  foreground=[("disabled", "#ffffff")])
+        style.configure("HeaderBtn.TButton", padding=(8, 3), borderwidth=1,
+                        background=c["header"], foreground="#dbe4f2",
+                        bordercolor="#3a4763", font=font)
         style.map("HeaderBtn.TButton",
-                  background=[("pressed", c["accent"]), ("active", c["header_field"])],
-                  foreground=[("active", c["header_text"])],
-                  bordercolor=[("active", c["header_hover_border"])],
-                  relief=[("pressed", "sunken")])
+                  background=[("active", "#27344e")],
+                  bordercolor=[("active", "#4d5f85")])
 
         style.configure("TEntry", fieldbackground=c["card"], bordercolor=c["border"],
                         padding=4, insertcolor=c["text"], relief="flat")
-        style.configure("Data.TEntry", fieldbackground=c["data_bg"], foreground=c["muted"],
+        style.configure("Data.TEntry", fieldbackground="#f4f6fa", foreground=c["muted"],
                         bordercolor=c["border"], padding=4, relief="flat")
         style.configure("TCombobox", fieldbackground=c["card"], background=c["card"],
                         bordercolor=c["border"], arrowcolor=c["muted"], padding=3)
         style.map("TCombobox", fieldbackground=[("readonly", c["card"])],
                   bordercolor=[("active", c["accent"])])
-        style.configure("Header.TCombobox", fieldbackground=c["header_field"],
-                        background=c["header_field"], foreground=c["header_text"],
-                        bordercolor=c["header_line"], arrowcolor=c["header_btn_fg"], padding=1)
+        style.configure("Header.TCombobox", fieldbackground="#27344e",
+                        background="#27344e", foreground="#ffffff",
+                        bordercolor="#3a4763", arrowcolor="#c9d5ea", padding=1)
         style.map("Header.TCombobox",
-                  fieldbackground=[("readonly", c["header_field"])],
-                  foreground=[("readonly", c["header_text"])])
+                  fieldbackground=[("readonly", "#27344e")],
+                  foreground=[("readonly", "#ffffff")])
 
         style.configure("TCheckbutton", background=c["card"], foreground=c["text"],
                         focuscolor=c["card"])
@@ -6345,27 +5762,16 @@ class App:
                         fieldbackground=c["card"], bordercolor=c["border"],
                         insertcolor=c["text"])
 
-        # 行高：按字体实测 linespace + 呼吸空间计算（tkinter-desktop 铁律：
-        # 中文 / 高 DPI 下不用默认值，避免文字被压、行紧叠）。用户配置可上调，
-        # 但不会低于字体实测高度 + 12px。
-        import tkinter.font as tkfont
-        try:
-            _probe = tkfont.Font(root=self.root, family=font[0], size=font[1])
-            _linespace = _probe.metrics("linespace")
-        except Exception:
-            _linespace = 20
-        _cfg_row = int(self.cfg.get("row_height", 0) or 0)
-        _row_h = hi_dpi.scale_px(max(_cfg_row, _linespace + 12))
+        _row_h = hi_dpi.scale_px(int(self.cfg.get("row_height", 30) or 30))
         style.configure("Treeview", background=c["card"], fieldbackground=c["card"],
                         foreground=c["text"], rowheight=_row_h, borderwidth=0,
                         font=font)
-        # 表头用 Design Token 而非硬编码色，深色主题也能跟随切换。
-        style.configure("Treeview.Heading", background=c["data_bg"],
-                        foreground=c["head_fg"], relief="flat", borderwidth=0,
-                        padding=(8, 9), font=("Microsoft YaHei UI", 9, "bold"))
-        style.map("Treeview.Heading", background=[("active", c["btn_active"])])
+        style.configure("Treeview.Heading", background="#f4f6fa",
+                        foreground="#4a5568", relief="flat", borderwidth=0,
+                        padding=(8, 8), font=("Microsoft YaHei UI", 9, "bold"))
+        style.map("Treeview.Heading", background=[("active", "#e9eef8")])
         style.map("Treeview", background=[("selected", c["select"])],
-                  foreground=[("selected", c["sel_fg"])])
+                  foreground=[("selected", "#12305c")])
         style.configure("TScrollbar", background="#e6eaf1", troughcolor=c["card"],
                         bordercolor=c["card"], arrowcolor=c["muted"], relief="flat")
 

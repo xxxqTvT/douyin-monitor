@@ -516,9 +516,6 @@ def probe_proxy(proxy='', url='', timeout=8, platform=DEFAULT_PLATFORM):
     except Exception as exc:
         return False, classify_error(exc, platform)
 
-# Cookie 校验用的公开示例账号（不是凭据，只用于探测登录态是否有效）
-VERIFY_SAMPLE_SEC_UID = 'MS4wLjABAAAA8U_l6rBzmy7bcy6xOJel4v0RzoR_wfAubGPeJimN__4'
-
 ANSI_RE = re.compile('\\x1b\\[[0-9;?]*[A-Za-z]')
 
 class TikTok:
@@ -901,9 +898,7 @@ def verify_cookie(cfg, sec_user_id='', timeout=20, platform=DEFAULT_PLATFORM):
         return False, '初始化失败：%s' % exc
     if not dy.cookie_map.get('sessionid'):
         return (False, 'Cookie 里没有 sessionid，不算登录状态')
-    # 只用来确认 Cookie 能否取到资料；任意公开账号都可，可用环境变量覆盖
-    sec = (sec_user_id or os.environ.get('DOUYIN_VERIFY_SEC_UID')
-           or VERIFY_SAMPLE_SEC_UID)
+    sec = sec_user_id or 'MS4wLjABAAAA8U_l6rBzmy7bcy6xOJel4v0RzoR_wfAubGPeJimN__4'
     try:
         profile = dy.fetch_profile(sec)
     except Exception as exc:

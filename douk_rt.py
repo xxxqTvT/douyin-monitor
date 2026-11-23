@@ -1,13 +1,9 @@
-"""用户数据目录与内置签名模块（signlib）的定位。
+"""数据目录解析与写入探测。
 
-登录信息、下载记录、作品、录像都放在独立的「数据目录」里；签名算法在
-signlib/（纯 Python，随程序分发），不再依赖 DouK 安装目录、douk_min 缓存
-或 curl_cffi。
-
-数据目录的选择顺序（第一个可写者胜出）：
-  1. 环境变量 DOUK_DATA（调试用）
-  2. 程序目录\\data（绿色版：整个文件夹拷走就能用）
-  3. %LOCALAPPDATA%\\DouYinMonitor\\data（程序目录不可写时，例如装在 Program Files）
+来源说明：
+    本文件为本项目自行实现，**不含 DouK-Downloader 的代码**。
+    沿用其 settings.json 结构，用于迁移旧版本的 Cookie 与下载记录，
+    详见 NOTICE.md 第 2 节。
 """
 
 import json

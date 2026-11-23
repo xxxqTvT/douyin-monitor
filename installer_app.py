@@ -18,7 +18,7 @@ import zipfile
 
 APP_EXE = "抖音监控.exe"
 APP_NAME = "抖音监控"
-VERSION = "1.7.48"
+VERSION = "1.7.38"
 UNINST_KEY = r"Software\Microsoft\Windows\CurrentVersion\Uninstall\DouYinMonitor"
 RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
 CREATE_NO_WINDOW = 0x08000000

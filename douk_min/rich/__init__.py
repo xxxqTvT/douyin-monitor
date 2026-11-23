@@ -1,8 +1,9 @@
-"""极简 rich 替身（只为满足 DouK 内部 src/template.py 的 import）。
+"""极简 rich 替身（只为满足上游模块的 import）。
 
-DouK 的控制台渲染我们完全不用，所以这里不实现任何真实渲染，
-只保证 `from rich.xxx import yyy` 能成功、被调用时安静失败。
+来源说明：
+    本项目自行编写的空实现桩，不含 rich / TikTokDownloader / DouK 的实现。
 """
+
 import sys
 import types
 

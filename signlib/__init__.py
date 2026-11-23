@@ -1,14 +1,18 @@
 """内置签名模块（纯 Python，随程序分发）。
 
-以前程序需要用户另外装一个 DouK-Downloader，再借用它 lib 目录里的
-a_bogus / X-Bogus / TikTok 签名模块；现在这些模块（纯 Python，只用标准库）
-直接放在 signlib/enc 里，打包时一起带上，因此：
+来源与许可（重要）：
+    signlib/enc/ 下的 8 个 .pyc 来自 TikTokDownloader
+    https://github.com/JoeanAmier/TikTokDownloader
+    作者 JoeanAmier，许可证 GPL-3.0，原样搬运未修改。
+    本项目因此整体按 GPL-3.0 发布，详见 NOTICE.md 与 LICENSE。
 
-- 不需要安装 DouK，也不需要 curl_cffi 和它的 DLL；
-- 不依赖 Python 版本必须 3.12（模块是 3.12 字节码，随程序自带的运行时一致）；
-- 换机器、换目录都能用。
+本文件、custom.py 为导入封装与 UA 常量，属本项目自行编写。
 
-对外只暴露三样东西：DouYinParams / TikTokParams / API_PARAMS。
+原 docstring（保留作说明）：
+    以前程序需要用户另外装一个 DouK-Downloader，再借用它 lib 目录里的
+    a_bogus / X-Bogus / TikTok 签名模块；现在这些模块直接放在 signlib/enc，
+    打包时一起带上：不需要安装 DouK，也不依赖 curl_cffi 和它的 DLL。
+    对外只暴露三样东西：DouYinParams / TikTokParams / API_PARAMS。
 """
 
 import os

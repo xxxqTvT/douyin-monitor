@@ -67,8 +67,33 @@ python verify_ui.py
 
 每个测试独立建沙箱，不会动你的真实账号数据。
 
+## 第三方组件与署名
+
+本项目**包含第三方 GPL-3.0 代码**，逐项来源见 [NOTICE.md](NOTICE.md)。
+
+| 组件 | 来源 | 许可 | 用途 |
+|---|---|---|---|
+| `signlib/enc/*.pyc`（8 个） | [TikTokDownloader](https://github.com/JoeanAmier/TikTokDownloader) by JoeanAmier | **GPL-3.0** | 抖音 a_bogus / X-Bogus / TikTok 请求签名，原样搬运未修改 |
+
+- `douk_dl.py`、`douk_rt.py`、`douk_min/` 是**本项目自行实现**，只沿用了老版本 DouK 的文件命名规则与配置结构做兼容，不含其代码。
+- 因为分发了 GPL-3.0 的签名模块，**本项目整体按 GPL-3.0 发布**，全文见 [LICENSE](LICENSE)。
+
+如果你希望本项目改用宽松许可证（MIT / Apache-2.0），需要先移除 `signlib/enc/` 那 8 个字节码文件，改成让使用者自备签名模块——那样程序需要额外准备步骤才能跑。
+
+## AI 辅助开发声明
+
+本项目在 **AI 编程助手辅助**下开发：使用 DeepSeek 系列模型完成代码生成、重构、缺陷定位与文档撰写；需求、验收、真机测试与发布决策由作者负责。
+
+所有 AI 产出的代码都经过：静态编译检查 → 26 组自测用例（`tests/`）→ 界面自检 → 打包后 `--selftest` 真机验证。
+
 ## 说明
 
 个人自用工具，非官方客户端。抖音接口与签名会随版本变化，登录态过期需重新扫码。
 
+「抖音」「TikTok」为各自权利人的商标，本项目与其无关联。
+
 请勿把 `client_config.json`、`client_state.json`、`data\` 提交到仓库——里面有账号、Cookie 和下载记录（已在 `.gitignore` 中排除）。
+
+## 许可证
+
+GNU General Public License v3.0，见 [LICENSE](LICENSE)。

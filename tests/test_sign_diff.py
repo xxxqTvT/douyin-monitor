@@ -127,10 +127,8 @@ def main():
 
         def fetch(signer, base_params):
             qq = dict(base_params)
-            if not os.environ.get("SIGN_TEST_SEC_UID"):
-                return []
             qq["uifid"] = cookie.get("UIFID", "")
-            qq.update({"sec_user_id": os.environ.get("SIGN_TEST_SEC_UID", ""),
+            qq.update({"sec_user_id": "MS4wLjABAAAA0Gj0A20LCVxIg3L0KMVyn1YJdZdGEKnhcpXu1YINzk8",
                        "count": "5", "max_cursor": "0"})
             qs = signer.sign_url("https://www.douyin.com" + API_PATH, qq, None, "GET", signlib.UA, "")
             req = urllib.request.Request(

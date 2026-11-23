@@ -19,7 +19,7 @@ import zipfile
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, "dist", "抖音监控")
 OUT_ROOT = r"D:\dshzijian\发布"
-VERSION = "1.7.48"
+VERSION = "1.7.38"
 APP_EXE = "抖音监控.exe"
 
 # 绝对不能进包的东西（都是本地个人数据）

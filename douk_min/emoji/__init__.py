@@ -1,8 +1,10 @@
-"""极简 emoji 替身 —— 只提供 DouK 用来清理文件名的那几个接口。
+"""极简 emoji 替身 —— 只提供上游模块用来清理文件名的那几个接口。
 
-DouK 的 src/tools/cleaner.py 只用到 replace_emoji；我们不带 4 MB 的
-Unicode 表情表，直接按正则把表情删掉，效果等价（文件名不留表情）。
+来源说明：
+    本项目自行编写的依赖替身（正则删除表情），不含 TikTokDownloader / DouK 的实现。
+    存在原因：TikTokDownloader 的 cleaner 依赖 emoji 包，我们不带 4 MB 表情表。
 """
+
 import re
 
 __version__ = "2.14.0"
